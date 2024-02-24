@@ -7,6 +7,7 @@ class ProductManager {
 
     async initialize(){
         this.#products = await this.getProducts()
+        
     }
 
     constructor(inputPath){
@@ -14,9 +15,10 @@ class ProductManager {
     }
 
     #getLastId(){
-        const id = ProductManager.#lastId;
-        ProductManager.#lastId += 1;
-        return id
+        const lastId = this.#products[this.#products.length - 1].id
+        let collector  = lastId + 1
+        return collector
+        
     }
     
     async addProduct(title, description, price, thumbnail, code, stock){
@@ -100,13 +102,13 @@ class ProductManager {
 
 const main = async()=>{
     const pruebaProducto = new ProductManager("./probando.json")
-    // await pruebaProducto.initialize() // cargo los productos existentes en mi archivo
+    await pruebaProducto.initialize() // cargo los productos existentes en mi archivo
     
     // cargo productos a mi archivo:
-    await pruebaProducto.addProduct("mesa", "mesa blanca", 12500, "https://google.com", "1a", 12)
-    await pruebaProducto.addProduct("silla", "silla negra", 15500, "https://google.com", "2b", 18)
-    await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "55b", 2)    
-    console.log(await pruebaProducto.getProducts())
+    // await pruebaProducto.addProduct("mesa", "mesa blanca", 12500, "https://google.com", "1a", 12)
+    // await pruebaProducto.addProduct("silla", "silla negra", 15500, "https://google.com", "2b", 18)
+    // await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "3c", 2)    
+    // console.log(await pruebaProducto.getProducts())
 
     // elimino producto por id y sobreescribo el archivo:
     // await pruebaProducto.deleteProduct(2)
