@@ -14,11 +14,15 @@ class ProductManager {
         this.path = inputPath
     }
 
-    #getLastId(){
-        const lastId = this.#products[this.#products.length - 1].id
-        let collector  = lastId + 1
-        return collector
-        
+    #getLastId(){        
+        if(this.#products.length){
+            const lastId = this.#products[this.#products.length - 1].id
+            let collector  = lastId + 1
+            return collector
+        }
+        const id = ProductManager.#lastId;
+        ProductManager.#lastId += 1;
+        return id
     }
     
     async addProduct(title, description, price, thumbnail, code, stock){
@@ -56,10 +60,15 @@ class ProductManager {
 
 
     async getProducts(){
-        const fileContent = await fs.promises.readFile(this.path)
-        const existingProducts = JSON.parse(fileContent)
-        
-        return existingProducts
+        try{
+            const fileContent = await fs.promises.readFile(this.path, "utf-8")
+            const existingProducts = JSON.parse(fileContent)
+            
+            return existingProducts
+
+        }catch (err){
+            return []
+        }
     }
 
 
@@ -75,13 +84,14 @@ class ProductManager {
     }
 
     async getProductById(idNum){
-        const fileProducts = await this.getProducts()
-
-        const searchId = fileProducts.find(e => e.id === idNum);
-        if(!searchId){
-            return console.log("NOT FOUND");
-        }
-        return searchId 
+        
+            const fileProducts = await this.getProducts()
+    
+            const searchId = fileProducts.find(e => e.id === idNum);
+            if(!searchId){
+                return console.log("NOT FOUND");
+            }
+            return searchId 
     }
 
     async deleteProduct(idNum){
@@ -107,7 +117,7 @@ const main = async()=>{
     // cargo productos a mi archivo:
     // await pruebaProducto.addProduct("mesa", "mesa blanca", 12500, "https://google.com", "1a", 12)
     // await pruebaProducto.addProduct("silla", "silla negra", 15500, "https://google.com", "2b", 18)
-    // await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "3c", 2)    
+    // // await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "3c", 2)    
     // console.log(await pruebaProducto.getProducts())
 
     // elimino producto por id y sobreescribo el archivo:
