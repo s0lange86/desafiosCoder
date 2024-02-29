@@ -1,0 +1,20 @@
+[
+	{
+		"id": 1,
+		"title": "mesa",
+		"description": "mesa blanca",
+		"price": 12500,
+		"thumbnail": "https://google.com",
+		"code": "1a",
+		"stock": 12
+	},
+	{
+		"id": 2,
+		"title": "silla",
+		"description": "silla negra",
+		"price": 15500,
+		"thumbnail": "https://google.com",
+		"code": "2b",
+		"stock": 18
+	}
+]

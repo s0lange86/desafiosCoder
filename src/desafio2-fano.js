@@ -1,7 +1,10 @@
 const fs = require('fs')
 
+// const filename = `${__dirname}/../assets/Products.json`
+
 class ProductManager {
     #products
+    #path
 
     static #lastId = 1
 
@@ -11,7 +14,7 @@ class ProductManager {
     }
 
     constructor(inputPath){
-        this.path = inputPath
+        this.#path = inputPath
     }
 
     #getLastId(){        
@@ -55,13 +58,13 @@ class ProductManager {
 
     async #writingFile (){
         const fileContent = JSON.stringify(this.#products, null, '\t')
-        await fs.promises.writeFile(this.path, fileContent)
+        await fs.promises.writeFile(this.#path, fileContent)
     }
 
 
     async getProducts(){
         try{
-            const fileContent = await fs.promises.readFile(this.path, "utf-8")
+            const fileContent = await fs.promises.readFile(this.#path, "utf-8")
             const existingProducts = JSON.parse(fileContent)
             
             return existingProducts
@@ -84,14 +87,10 @@ class ProductManager {
     }
 
     async getProductById(idNum){
-        
-            const fileProducts = await this.getProducts()
+        const fileProducts = this.#products
     
-            const searchId = fileProducts.find(e => e.id === idNum);
-            if(!searchId){
-                return console.log("NOT FOUND");
-            }
-            return searchId 
+        const searchId = fileProducts.find(e => e.id === idNum);
+        return searchId 
     }
 
     async deleteProduct(idNum){
@@ -102,7 +101,7 @@ class ProductManager {
 
         //reescribo el archivo
         const fileUpdated = JSON.stringify(restProducts, null, '\t')
-        await fs.promises.writeFile(this.path, fileUpdated)
+        await fs.promises.writeFile(this.#path, fileUpdated)
     }
 
 }
@@ -110,26 +109,28 @@ class ProductManager {
 
 // ------------> TESTING
 
-const main = async()=>{
-    const pruebaProducto = new ProductManager("./probando.json")
-    await pruebaProducto.initialize() // cargo los productos existentes en mi archivo
+// const main = async()=>{
+//     const pruebaProducto = new ProductManager(filename)
+//     await pruebaProducto.initialize() // cargo los productos existentes en mi archivo
     
-    // cargo productos a mi archivo:
-    // await pruebaProducto.addProduct("mesa", "mesa blanca", 12500, "https://google.com", "1a", 12)
-    // await pruebaProducto.addProduct("silla", "silla negra", 15500, "https://google.com", "2b", 18)
-    // // await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "3c", 2)    
-    // console.log(await pruebaProducto.getProducts())
+//     // cargo productos a mi archivo:
+//     // await pruebaProducto.addProduct("mesa", "mesa blanca", 12500, "https://google.com", "1a", 12)
+//     // await pruebaProducto.addProduct("silla", "silla negra", 15500, "https://google.com", "2b", 18)
+//     // // await pruebaProducto.addProduct("rack", "rack tv color marron claro", 28800, "https://google.com", "3c", 2)    
+//     // console.log(await pruebaProducto.getProducts())
 
-    // elimino producto por id y sobreescribo el archivo:
-    // await pruebaProducto.deleteProduct(2)
-    // console.log(await pruebaProducto.getProducts())
+//     // elimino producto por id y sobreescribo el archivo:
+//     // await pruebaProducto.deleteProduct(2)
+//     // console.log(await pruebaProducto.getProducts())
 
-    // busco archivo por ID:
-    // console.log(await pruebaProducto.getProductById(2))
+//     // busco archivo por ID:
+//     console.log(await pruebaProducto.getProductById(2))
     
-    // actualizamos producto:
-    // await pruebaProducto.updateProduct(2, "sofa", "sofa gris antidesgarro", 80500, "https://google.com", "3c", 8)
+//     // actualizamos producto:
+//     // await pruebaProducto.updateProduct(2, "sofa", "sofa gris antidesgarro", 80500, "https://google.com", "3c", 8)
 
-}
+// }
 
-main()
+// main()
+
+module.exports = ProductManager
